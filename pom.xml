@@ -10,6 +10,12 @@
     <name>pandora-dependencies</name>
     <description>统一的依赖管理</description>
 
+    <scm>
+        <connection>scm:git:https://github.com/seven-boot/pandora-dependencies.git</connection>
+        <developerConnection>scm:git:https://github.com/seven-boot/pandora-dependencies.git</developerConnection>
+        <url>https://github.com/seven-boot/pandora-dependencies</url>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
@@ -33,6 +39,8 @@
         <!-- Projects -->
         <okhttp.version>3.14.9</okhttp.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
+        <pandora.version>1.0.0.RELEASE</pandora.version>
+        <pandora.development.version>1.0.1-SNAPSHOT</pandora.development.version>
     </properties>
 
     <licenses>
@@ -41,6 +49,24 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <name>seven</name>
+            <email>H_Qiao1126@163.com</email>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://192.168.80.69:18018/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://192.168.80.69:18018/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -196,6 +222,35 @@
                         <groupId>io.spring.javaformat</groupId>
                         <artifactId>spring-javaformat-maven-plugin</artifactId>
                         <version>${spring-javaformat-maven-plugin.version}</version>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>${maven-release-plugin.version}</version>
+                        <configuration>
+                            <providerImplementations>
+                                <git>jgit</git>
+                            </providerImplementations>
+                            <username>seven-boot</username>
+                            <password>qiaohao1126</password>
+                            <tagBase>${project.artifactId}-${project.version}</tagBase>
+                            <goals>-f pom.xml deploy</goals>
+                            <releaseLabel>${pandora.version}</releaseLabel>
+                            <releaseVersion>${pandora.version}</releaseVersion>
+                            <developmentVersion>${pandora.development.version}</developmentVersion>
+                            <preparationGoals>clean verify</preparationGoals>
+                            <checkModificationExcludes>
+                                <checkModificationExclude>*.iml</checkModificationExclude>
+                            </checkModificationExcludes>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.scm</groupId>
+                                <artifactId>maven-scm-provider-jgit</artifactId>
+                                <version>${maven-scm-provider-jgit-plugin.version}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
                 </plugins>
             </build>
